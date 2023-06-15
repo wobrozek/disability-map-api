@@ -9,7 +9,7 @@ using disability_map.Data;
 
 namespace disability_map.Migrations
 {
-    [DbContext(typeof(PlaceDbContext))]
+    [DbContext(typeof(Data.DbMainContext))]
     partial class PlaceDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

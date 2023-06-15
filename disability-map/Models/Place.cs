@@ -2,16 +2,25 @@
 
 namespace disability_map.Models
 {
-    public class Place
+    public class Place : Entity
     {
-        [Required]
-        public string Id { get; set; }
+        public Place(string name, string latitude, string longitude, string adress, string openingHours, string? phone, string? email)
+        {
+            Name = name;
+            Latitude = latitude;
+            Longitude = longitude;
+            Adress = adress;
+            OpeningHours = openingHours;
+            Phone = phone;
+            Email = email;
+        }
+
         [Required]
         public string Name { get; set; }
         [Required]
         public string Latitude { get; set; }
         [Required]
-        public string longitude { get; set; }
+        public string Longitude { get; set; }
         [Required]
         public string Adress { get; set; }
         [Required]
@@ -19,5 +28,7 @@ namespace disability_map.Models
         
         public string? Phone{ get; set; }
         public string? Email { get; set; }
+
+  
     }
 }

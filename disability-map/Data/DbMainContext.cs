@@ -3,14 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace disability_map.Data
 {
-    public class PlaceDbContext:DbContext
+    public class DbMainContext:DbContext
     {
-        public PlaceDbContext(DbContextOptions<PlaceDbContext> options):base(options)
+        public DbMainContext(DbContextOptions<DbContext> options):base(options)
         {
 
         }
 
         public DbSet<Place> Place { get; set; }
         public DbSet<Score> Score { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

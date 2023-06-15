@@ -16,7 +16,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.LoginPath = "/Access/Login";
     o.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 });
-builder.Services.AddDbContext<PlaceDbContext>(o=>o.UseSqlServer(builder.Configuration.GetConnectionString("sqlServer")));
+builder.Services.AddDbContext<DbContext>(o=>o.UseSqlServer(builder.Configuration.GetConnectionString("sqlServer")));
 
 var app = builder.Build();
 

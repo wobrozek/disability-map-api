@@ -10,7 +10,7 @@ using disability_map.Data;
 
 namespace disability_map.Migrations
 {
-    [DbContext(typeof(PlaceDbContext))]
+    [DbContext(typeof(Data.DbMainContext))]
     [Migration("20230612172318_add-score")]
     partial class addscore
     {
