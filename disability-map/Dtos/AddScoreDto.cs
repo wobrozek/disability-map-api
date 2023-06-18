@@ -1,6 +1,6 @@
 ﻿namespace disability_map.Dtos
 {
-    public class AddScore
+    public class AddScoreDto
     {
         public string PlaceId { get; set; }
     }

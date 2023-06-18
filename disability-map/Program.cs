@@ -1,4 +1,5 @@
 using disability_map.Data;
+using disability_map.Services.ScoreService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configu
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IScoreService, ScoreService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
