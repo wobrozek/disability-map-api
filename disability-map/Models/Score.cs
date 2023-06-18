@@ -1,17 +1,16 @@
-﻿namespace disability_map.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace disability_map.Models
 {
-    public class Score: Entity
+    public class Score
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string PlaceId { get; set; }
+        public List<User> Likes { get; set; } = new();
+        public List<User> DisLikes { get; set; } = new();
 
 
-        public int likes { get; set; }
-        public int dislikes{ get; set;}
 
-        public Score(string id)
-        {
-            this.Id = id;
-            this.likes = 0;
-            this.dislikes = 0;
-        }
     }
 }

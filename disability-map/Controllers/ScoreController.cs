@@ -15,23 +15,8 @@ namespace disability_map.Controllers
         public ScoreController(DbMainContext context) => _context = context;
 
 
-        [HttpGet]
-        [Route("score/{idList}")]
-        public async Task<List<Score>> Get([FromQuery] string[] idList)
+        private async Task<Score> AddToBase(string id)
         {
-            List<Score> listScore = new List<Score>();
-
-            foreach (string id in idList)
-            {
-                listScore.Add(await ScoreById(id));
-            }
-
-            return listScore;
-        }
-
-        public async Task<Score> ScoreById(string id)
-        {
-            //return likes and dislikes for id
             var element = await _context.Score.FindAsync(id);
             if (element is not null)
             {
@@ -39,11 +24,21 @@ namespace disability_map.Controllers
             }
 
             //if element does't contain score create score
-            Score newScore = new Score(id);
-            _context.Score.Add(newScore);
-            _context.SaveChanges();
+            //Score newScore = new Score(id);
+            //_context.Score.Add(newScore);
+            //_context.SaveChanges();
 
-            return newScore;
+            return element;
+        }
+
+
+        [HttpGet]
+        [Route("score/{id}")]
+        public async Task<ActionResult<Score>> ScoreById(string id)
+        {
+            Score element = await AddToBase(id);
+
+            return Ok(element);
         }
     }
 }

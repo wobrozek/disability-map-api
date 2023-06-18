@@ -1,19 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Nanoid;
 
 namespace disability_map.Models
 {
-    public class Place : Entity
+    public class Place
     {
-        public Place(string name, string latitude, string longitude, string adress, string openingHours, string? phone, string? email)
-        {
-            Name = name;
-            Latitude = latitude;
-            Longitude = longitude;
-            Adress = adress;
-            OpeningHours = openingHours;
-            Phone = phone;
-            Email = email;
-        }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string PlaceId { get; set; } = Nanoid.Nanoid.Generate();
 
         [Required]
         public string Name { get; set; }
@@ -25,7 +19,9 @@ namespace disability_map.Models
         public string Adress { get; set; }
         [Required]
         public string OpeningHours { get; set; }
-        
+
+        public User? Owner { get; set; }
+
         public string? Phone{ get; set; }
         public string? Email { get; set; }
 

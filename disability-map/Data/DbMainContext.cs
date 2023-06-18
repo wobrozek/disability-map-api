@@ -5,8 +5,34 @@ namespace disability_map.Data
 {
     public class DbMainContext:DbContext
     {
-        public DbMainContext(DbContextOptions<DbContext> options):base(options)
+        public DbMainContext(DbContextOptions<DbMainContext> options):base(options)
+        { 
+
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder
+               .Entity<Score>()
+               .HasMany(sc => sc.DisLikes)
+               .WithMany(p => p.DisLikes);
+
+            modelBuilder.Entity<Score>()
+               .HasMany(sc => sc.Likes)
+               .WithMany(p => p.Likes);
+
+
+            modelBuilder
+                .Entity<User>()
+                .HasMany(e => e.DisLikes)
+                .WithMany(e => e.DisLikes);
+
+            modelBuilder
+                .Entity<User>()
+                .HasMany(e => e.Likes)
+                .WithMany(e => e.Likes);
 
         }
 
