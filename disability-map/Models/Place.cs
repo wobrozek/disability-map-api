@@ -12,15 +12,18 @@ namespace disability_map.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Latitude { get; set; }
+        public Double Latitude { get; set; }
         [Required]
-        public string Longitude { get; set; }
+        public Double Longitude { get; set; }
         [Required]
         public string Adress { get; set; }
         [Required]
         public string OpeningHours { get; set; }
 
+        public PlaceType Type { get; set; }
+
         public User? Owner { get; set; }
+        public string? ImagePath { get; set; }
 
         public string? Phone{ get; set; }
         public string? Email { get; set; }

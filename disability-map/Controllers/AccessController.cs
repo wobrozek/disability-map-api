@@ -5,42 +5,39 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace disability_map.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AccessController : Controller
     {
-        [ApiController]
-        [Route("[controller]")]
-        public class AuthController : ControllerBase
+        private readonly IAuthRepository _authRepo;
+
+        public AccessController(IAuthRepository authRepo)
         {
-            private readonly IAuthRepository _authRepo;
+            _authRepo = authRepo;
+        }
 
-            public AuthController(IAuthRepository authRepo)
+        [HttpPost("Register")]
+        public async Task<ActionResult<ServiceResponse<int>>> Register(RegisterUserDto request)
+        {
+            var response = await _authRepo.Register(
+                new User { Email = request.Email, Login= request.Login }, request.Password
+            );
+            if (!response.Success)
             {
-                _authRepo = authRepo;
+                return BadRequest(response);
             }
+            return Ok(response);
+        }
 
-            [HttpPost("Register")]
-            public async Task<ActionResult<ServiceResponse<int>>> Register(RegisterUserDto request)
+        [HttpPost("Login")]
+        public async Task<ActionResult<ServiceResponse<int>>> Login(GetUserDto request)
+        {
+            var response = await _authRepo.Login(request.Login, request.Password);
+            if (!response.Success)
             {
-                var response = await _authRepo.Register(
-                    new User { Email = request.Email }, request.Password
-                );
-                if (!response.Success)
-                {
-                    return BadRequest(response);
-                }
-                return Ok(response);
+                return BadRequest(response);
             }
-
-            [HttpPost("Login")]
-            public async Task<ActionResult<ServiceResponse<int>>> Login(GetUserDto request)
-            {
-                var response = await _authRepo.Login(request.Email, request.Password);
-                if (!response.Success)
-                {
-                    return BadRequest(response);
-                }
-                return Ok(response);
-            }
+            return Ok(response);
         }
     }
 }

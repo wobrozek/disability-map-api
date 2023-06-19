@@ -6,6 +6,6 @@ namespace disability_map.Data
     {
         Task<ServiceResponse<int>> Register(User user, string password);
         Task<ServiceResponse<string>> Login(string username, string password);
-        Task<bool> UserExists(string username);
+        Task<bool> FieldExists(string username, string field);
     }
 }

@@ -15,29 +15,50 @@ namespace disability_map.Services.ScoreService
             _context = context;
         }
 
-        public Task<Score> downVote(string id)
+        public Task<ServiceResponse<int>> downVote(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Score> GetScoreById(string id)
+        public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id)
         {
+            var response = new ServiceResponse<GetScoreDto>();
+
             var element = await _context.Score.FindAsync(id);
             if (element is not null)
             {
-                return element;
+                var scoreDto = new GetScoreDto()
+                {
+                    PlaceId = element.PlaceId,
+                    DisLikes = element.DisLikes.Count(),
+                    Likes = element.Likes.Count(),
+                };
+                response.Data = scoreDto;
+                return response;
             }
 
             //if element does't contain score create score
-            AddScoreDto dtoScore = new AddScoreDto() { PlaceId = id};
-            Score newScore = _mapper.Map<Score>(dtoScore);
-            _context.Score.Add(newScore);
+            Score scoreElement =new Score()
+            {
+                PlaceId=id,
+            };
+
+            _context.Score.Add(scoreElement);
             _context.SaveChanges();
 
-            return newScore;
+            var dto = new GetScoreDto()
+            {
+                PlaceId = element.PlaceId,
+                DisLikes = element.DisLikes.Count(),
+                Likes = element.Likes.Count(),
+            };
+
+            response.Data = dto;
+
+            return response;
         }
 
-        public Task<Score> upVote(string id)
+        public Task<ServiceResponse<int>> upVote(string id)
         {
             throw new NotImplementedException();
         }

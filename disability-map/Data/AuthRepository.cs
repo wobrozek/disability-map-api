@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Drawing;
 
 namespace disability_map.Data
 {
@@ -16,11 +17,11 @@ namespace disability_map.Data
             _context = context;
 
         }
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<string>> Login(string login, string password)
         {
             var response = new ServiceResponse<string>();
             var user = await _context.User
-                .FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+                .FirstOrDefaultAsync(u => u.Login.ToLower().Equals(login.ToLower()));
             if (user is null)
             {
                 response.Success = false;
@@ -42,10 +43,17 @@ namespace disability_map.Data
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             var response = new ServiceResponse<int>();
-            if (await UserExists(user.Email))
+            if (await FieldExists(user.Email,"Email"))
             {
                 response.Success = false;
-                response.Message = "User already exists.";
+                response.Message = "Email already exists.";
+                return response;
+            }
+
+            if (await FieldExists(user.Login,"Login"))
+            {
+                response.Success = false;
+                response.Message = "Login already exists.";
                 return response;
             }
 
@@ -60,9 +68,11 @@ namespace disability_map.Data
             return response;
         }
 
-        public async Task<bool> UserExists(string email)
+        public async Task<bool> FieldExists(string email, string field)
         {
-            if (await _context.User.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
+            var type = typeof(User);
+
+            if (await _context.User.AnyAsync(u => type.GetProperty(field).GetValue(u,null).ToString().ToLower() == email.ToLower()))
             {
                 return true;
             }
@@ -92,7 +102,7 @@ namespace disability_map.Data
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Name, user.Login)
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
@@ -115,6 +125,12 @@ namespace disability_map.Data
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        private void createImage(User user)
+        {
+            
+            
         }
     }
 }
