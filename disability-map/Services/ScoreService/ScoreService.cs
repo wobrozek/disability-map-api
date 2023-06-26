@@ -2,6 +2,7 @@
 using disability_map.Data;
 using disability_map.Dtos;
 using disability_map.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace disability_map.Services.ScoreService
 {
@@ -13,11 +14,6 @@ namespace disability_map.Services.ScoreService
         {
             _mapper = mapper;
             _context = context;
-        }
-
-        public Task<ServiceResponse<int>> downVote(string id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id)
@@ -48,19 +44,61 @@ namespace disability_map.Services.ScoreService
 
             var dto = new GetScoreDto()
             {
-                PlaceId = element.PlaceId,
-                DisLikes = element.DisLikes.Count(),
-                Likes = element.Likes.Count(),
+                PlaceId = scoreElement.PlaceId,
+                DisLikes = scoreElement.DisLikes.Count(),
+                Likes = scoreElement.Likes.Count(),
             };
 
             response.Data = dto;
 
             return response;
         }
+        // toggle number of likes
+        public async Task<ServiceResponse<int>> upVote(string id, string userId)
+        {
+            var response = new ServiceResponse<int>();
 
-        public Task<ServiceResponse<int>> upVote(string id)
+            try
+            {
+                Score scoreElement = await _context.Score.FindAsync(id);
+                User user= await _context.User.FindAsync(userId);
+
+                deleteIfExist(user, scoreElement.DisLikes);
+                bool toUpvote = deleteIfExist(user, scoreElement.Likes);
+
+                if (!toUpvote)
+                {
+                    scoreElement.Likes.Add(user);
+                }
+
+                response.Data = scoreElement.Likes.Count();
+            }
+            catch (Exception error)
+            {
+                response.Success = false;
+                response.Message = error.Message;
+            }
+            
+            return response;
+        }
+
+        // toggle number of dislikes
+        public Task<ServiceResponse<int>> downVote(string id,string userId)
         {
             throw new NotImplementedException();
         }
+
+
+        //return true and delete user from score relations or return false if not exist
+        public bool deleteIfExist(User user,List<User> list )
+        {
+            if(list.Any(listUser => listUser.Id == user.Id))
+            {
+                list.Remove(user);
+                return true;
+            }
+            return false;
+        }
+
     }
 }
