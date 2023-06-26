@@ -17,6 +17,7 @@ builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configu
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<IUserService, UserService>();

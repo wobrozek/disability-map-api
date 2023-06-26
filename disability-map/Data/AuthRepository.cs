@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Drawing;
+using System.Linq.Expressions;
 
 namespace disability_map.Data
 {
@@ -72,7 +73,9 @@ namespace disability_map.Data
         {
             var type = typeof(User);
 
-            if (await _context.User.AnyAsync(u => type.GetProperty(field).GetValue(u,null).ToString().ToLower() == email.ToLower()))
+            var users = await _context.User.ToListAsync();
+
+            if (users.Any(u => type.GetProperty(field).GetValue(u).ToString().ToLower() == email.ToLower()))
             {
                 return true;
             }
