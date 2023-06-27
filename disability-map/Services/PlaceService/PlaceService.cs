@@ -6,22 +6,27 @@ namespace disability_map.Services.PlaceService
 {
     public class PlaceService : IPlaceService
     {
-        public Task<ServiceResponse<GetPlaceDto>> DeletePlace(Place place)
+        public Task<ServiceResponse<int>> CreatePlace(PostPlaceDto place)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<GetPlaceDto>> EditPlace(Place place)
+        public Task<ServiceResponse<string>> DeletePlace(string placeId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<GetPlaceDto>> GetPlaceById(string id)
+        public Task<ServiceResponse<int>> EditPlace(GetPlaceDto place)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<GetPlacesDto>> GetPlacesByRadius(string id, double radius)
+        public Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(string placeId, double radius)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceResponse<List<GetPlaceDto>>> GetUserPlaces(int id)
         {
             throw new NotImplementedException();
         }

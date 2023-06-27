@@ -18,9 +18,9 @@ namespace disability_map.Controllers
  
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Score>> PlaceById(string id)
+        public async Task<ActionResult<Score>> PlaceById(int id)
         {
-            return Ok(await _placeService.GetPlaceById(id));
+            return Ok(await _placeService.GetUserPlaces(id));
         }
 
         // GET: PlaceController/Details/5

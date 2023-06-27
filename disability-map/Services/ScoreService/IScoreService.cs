@@ -6,7 +6,7 @@ namespace disability_map.Services.ScoreService
     public interface IScoreService
     {
         Task<ServiceResponse<GetScoreDto>> GetScoreById(string id);
-        Task<ServiceResponse<int>> upVote(string id, string userId);
-        Task<ServiceResponse<int>> downVote(string id, string userId);
+        Task<ServiceResponse<int>> upVote(string id, int userId);
+        Task<ServiceResponse<int>> downVote(string id, int userId);
     }
 }

@@ -21,8 +21,14 @@ namespace disability_map.Services.ScoreService
             var response = new ServiceResponse<GetScoreDto>();
 
             var element = await _context.Score.FindAsync(id);
+            
+            
+
             if (element is not null)
             {
+                await _context.Entry(element).Collection(p => p.Likes).Query().LoadAsync();
+                await _context.Entry(element).Collection(p => p.DisLikes).Query().LoadAsync();
+
                 var scoreDto = new GetScoreDto()
                 {
                     PlaceId = element.PlaceId,
@@ -40,7 +46,7 @@ namespace disability_map.Services.ScoreService
             };
 
             _context.Score.Add(scoreElement);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var dto = new GetScoreDto()
             {
@@ -54,24 +60,41 @@ namespace disability_map.Services.ScoreService
             return response;
         }
         // toggle number of likes
-        public async Task<ServiceResponse<int>> upVote(string id, string userId)
+        public async Task<ServiceResponse<int>> upVote(string id, int userId)
         {
             var response = new ServiceResponse<int>();
 
             try
-            {
+            { 
                 Score scoreElement = await _context.Score.FindAsync(id);
                 User user= await _context.User.FindAsync(userId);
+                
+                // refresh context for entity in relation
+                await _context.Entry(scoreElement).Collection(p => p.Likes).Query().LoadAsync();
+                await _context.Entry(scoreElement).Collection(p => p.DisLikes).Query().LoadAsync();
 
-                deleteIfExist(user, scoreElement.DisLikes);
-                bool toUpvote = deleteIfExist(user, scoreElement.Likes);
+                if (scoreElement == null)
+                {
+                    response.Message = "element with " + id + " doesn't exist";
+                    response.Success = false;
+                    return response;
+                }
+
+                deleteIfExistAsync(user, scoreElement.DisLikes);
+                bool toUpvote = await deleteIfExistAsync(user, scoreElement.Likes);
 
                 if (!toUpvote)
                 {
                     scoreElement.Likes.Add(user);
                 }
 
-                response.Data = scoreElement.Likes.Count();
+                var attach = _context.Score.Attach(scoreElement);
+                attach.State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+                int likes = scoreElement.Likes.Count();
+
+                response.Data = likes;
             }
             catch (Exception error)
             {
@@ -83,18 +106,60 @@ namespace disability_map.Services.ScoreService
         }
 
         // toggle number of dislikes
-        public Task<ServiceResponse<int>> downVote(string id,string userId)
+        public async Task<ServiceResponse<int>> downVote(string id,int userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<int>();
+
+            try
+            {
+                Score scoreElement = await _context.Score.FindAsync(id);
+                User user = await _context.User.FindAsync(userId);
+
+
+                if (scoreElement == null)
+                {
+                    response.Message = "element with " + id + " doesn't exist";
+                    response.Success = false;
+                    return response;
+                }
+
+                // refresh context for entity in relation
+                await _context.Entry(scoreElement).Collection(p => p.Likes).Query().LoadAsync();
+                await _context.Entry(scoreElement).Collection(p => p.DisLikes).Query().LoadAsync();
+
+                deleteIfExistAsync(user, scoreElement.Likes);
+                bool toDisLike = await deleteIfExistAsync(user, scoreElement.DisLikes);
+
+                if (!toDisLike)
+                {
+                    scoreElement.DisLikes.Add(user);
+                }
+
+                var attach = _context.Score.Attach(scoreElement);
+                attach.State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+                int likes = scoreElement.Likes.Count();
+
+                response.Data = likes;
+            }
+            catch (Exception error)
+            {
+                response.Success = false;
+                response.Message = error.Message;
+            }
+
+            return response;
         }
 
 
         //return true and delete user from score relations or return false if not exist
-        public bool deleteIfExist(User user,List<User> list )
+        public async Task<bool> deleteIfExistAsync(User user, ICollection<User> list )
         {
             if(list.Any(listUser => listUser.Id == user.Id))
             {
                 list.Remove(user);
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;

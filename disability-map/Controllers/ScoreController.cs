@@ -31,11 +31,18 @@ namespace disability_map.Controllers
            return Ok(await _scoreService.GetScoreById(id));
         }
 
-        [HttpGet("upvote/{id}"), Authorize]
+        [HttpPut("upvote/{id}"), Authorize]
         public async Task<ActionResult<Score>> upvote(string id)
         {
-            string userId = _userService.GetUserId();
+            int userId =_userService.GetUserId();
             return Ok(await _scoreService.upVote(id,userId));
+        }
+
+        [HttpPut("downvote/{id}"), Authorize]
+        public async Task<ActionResult<Score>> downvote(string id)
+        {
+            int userId = _userService.GetUserId();
+            return Ok(await _scoreService.downVote(id, userId));
         }
     }
 }

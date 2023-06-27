@@ -2,9 +2,8 @@
 
 namespace disability_map.Dtos
 {
-    public class GetPlaceDto
+    public class PostPlaceDto
     {
-        public string PlaceId { get; set; }
         public string Name { get; set; }
 
         public Double Latitude { get; set; }

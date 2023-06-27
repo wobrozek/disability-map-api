@@ -7,8 +7,8 @@ namespace disability_map.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string PlaceId { get; set; }
-        public List<User> Likes { get; set; } = new();
-        public List<User> DisLikes { get; set; } = new();
+        public List<User>? Likes { get; set; } = new();
+        public List<User>? DisLikes { get; set; } = new();
 
 
 

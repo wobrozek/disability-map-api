@@ -6,7 +6,7 @@ namespace disability_map.Data
     public class DbMainContext:DbContext
     {
         public DbMainContext(DbContextOptions<DbMainContext> options):base(options)
-        { 
+        {
 
         }
 

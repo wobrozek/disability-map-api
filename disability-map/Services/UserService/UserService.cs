@@ -15,11 +15,11 @@ namespace disability_map.Services.UserService
             _context = context;
         }
 
-        public string GetUserId()
+        public int GetUserId()
         {
-            string result = string.Empty;
+            int result;
 
-            return result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return result = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 
         }
     }
