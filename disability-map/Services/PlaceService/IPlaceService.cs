@@ -5,15 +5,14 @@ namespace disability_map.Services.PlaceService
 {
     public interface IPlaceService
     {
-        Task<ServiceResponse<List<GetPlaceDto>>> GetUserPlaces(int id);
 
         Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(string placeId, Double radius);
 
-        Task<ServiceResponse<int>> EditPlace(GetPlaceDto place);
+        ServiceResponse<string> EditPlace(PostPlaceDto place, int userId);
 
-        Task<ServiceResponse<string>> DeletePlace(string placeId);
+        ServiceResponse<string> DeletePlace(string placeId, int userId);
 
-        Task<ServiceResponse<int>> CreatePlace(PostPlaceDto place);
+        Task<ServiceResponse<string>> CreatePlace(PostPlaceDto place, int userId);
 
     }
 }

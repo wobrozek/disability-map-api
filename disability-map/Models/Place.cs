@@ -22,7 +22,7 @@ namespace disability_map.Models
 
         public PlaceType Type { get; set; }
 
-        public User? Owner { get; set; }
+        public User Owner { get; set; }
         public string? ImagePath { get; set; }
 
         public string? Phone{ get; set; }

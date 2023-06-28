@@ -1,5 +1,8 @@
-﻿using disability_map.Models;
+﻿using disability_map.Dtos;
+using disability_map.Models;
 using disability_map.Services.PlaceService;
+using disability_map.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,17 +13,34 @@ namespace disability_map.Controllers
     public class PlaceController : ControllerBase
     {
         private readonly IPlaceService _placeService;
+        private readonly IUserService _userService;
 
-        public PlaceController(IPlaceService placeService)
+        public PlaceController(IPlaceService placeService, IUserService userService)
         {
             _placeService = placeService;
+            _userService = userService;
         }
  
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Score>> PlaceById(int id)
+        [HttpPost,Authorize]
+        public async Task<ActionResult<Score>> CreatePlace(PostPlaceDto place)
         {
-            return Ok(await _placeService.GetUserPlaces(id));
+            int userId = _userService.GetUserId();
+            return Ok(await _placeService.CreatePlace(place,userId));
+        }
+
+        [HttpDelete, Authorize]
+        public async Task<ActionResult<Score>> DeletePlace(string id)
+        {
+            int userId = _userService.GetUserId();
+            return Ok(_placeService.DeletePlace(id, userId));
+        }
+
+        [HttpPut, Authorize]
+        public async Task<ActionResult<Score>> EditPlace(PostPlaceDto place)
+        {
+            int userId = _userService.GetUserId();
+            return Ok(_placeService.EditPlace(place, userId));
         }
 
         // GET: PlaceController/Details/5
