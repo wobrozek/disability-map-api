@@ -7,9 +7,7 @@ namespace disability_map.Dtos
         public string PlaceId { get; set; }
         public string Name { get; set; }
 
-        public Double Latitude { get; set; }
-
-        public Double Longitude { get; set; }
+        public string ll { get; set; }
 
         public string Adress { get; set; }
 

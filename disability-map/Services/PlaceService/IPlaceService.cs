@@ -8,9 +8,9 @@ namespace disability_map.Services.PlaceService
 
         Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(string placeId, Double radius);
 
-        ServiceResponse<string> EditPlace(PostPlaceDto place, int userId);
+        Task<ServiceResponse<string>> EditPlace(PostPlaceDto place, int userId, string placeId);
 
-        ServiceResponse<string> DeletePlace(string placeId, int userId);
+        Task<ServiceResponse<string>> DeletePlace(string placeId, int userId);
 
         Task<ServiceResponse<string>> CreatePlace(PostPlaceDto place, int userId);
 

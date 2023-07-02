@@ -26,10 +26,13 @@ namespace disability_map.Services.PlaceService
             try
             {
                 User user = await _context.User.FindAsync(userId);
+
+      
                 Place newPlace = _mapper.Map<Place>(place);
 
                 newPlace.Owner = user;
                 await _context.Place.AddAsync(newPlace);
+                _context.SaveChanges();
                 response.Data = newPlace.PlaceId;
             }
             catch(Exception er)
@@ -41,15 +44,28 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public ServiceResponse<string> DeletePlace(string placeId ,int userId)
+        public async Task<ServiceResponse<string>> DeletePlace(string placeId ,int userId )
         {
             var response = new ServiceResponse<string>();
 
             try
             {
-                Place place = new Place { PlaceId = placeId };
-                _context.Place.Attach(place);
-                _context.Place.Remove(place);
+                User user = await _context.User.FindAsync(userId);
+                await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
+
+                if (user.MyPlaces.Any(el=> el.PlaceId == placeId))
+                {
+                    await _context.Place.Where(t => t.PlaceId == placeId).ExecuteDeleteAsync
+                    //var placeToDelete =_context.Place.Attach(new Place { PlaceId = placeId });
+                    //placeToDelete.State = EntityState.Deleted;
+                    //await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "user doesn't have place with that id";
+                }
+                
             }
             catch (Exception er)
             {
@@ -60,15 +76,28 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public ServiceResponse<string> EditPlace(PostPlaceDto place, int userId)
+        public async Task<ServiceResponse<string>> EditPlace(PostPlaceDto place, int userId, string placeId)
         {
             var response = new ServiceResponse<string>();
 
             try
             {
-                Place newPlace = _mapper.Map<Place>(place);
-                _context.Place.Attach(newPlace);
-                response.Data = newPlace.PlaceId;
+                User user = await _context.User.FindAsync(userId);
+                await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
+
+                if (user.MyPlaces.Any(el => el.PlaceId == placeId))
+                {
+                    Place newPlace = _mapper.Map<Place>(place);
+                    _context.Place.Attach(newPlace);
+
+                    await _context.SaveChangesAsync();
+                    response.Data = newPlace.PlaceId;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "user doesn't have place with that id";
+                }
             }
             catch (Exception er)
             {

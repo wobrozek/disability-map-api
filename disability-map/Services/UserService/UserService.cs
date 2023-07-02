@@ -1,4 +1,6 @@
-﻿using disability_map.Data;
+﻿using AutoMapper;
+using disability_map.Data;
+using disability_map.Dtos;
 using disability_map.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -9,11 +11,13 @@ namespace disability_map.Services.UserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DbMainContext _context;
+        private readonly IMapper _mapper;
 
-        public UserService(IHttpContextAccessor httpContextAccessor, DbMainContext context)
+        public UserService(IHttpContextAccessor httpContextAccessor, DbMainContext context, IMapper mapper)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
+            _mapper = mapper;
         }
 
         public int GetUserId()
@@ -24,14 +28,17 @@ namespace disability_map.Services.UserService
                 
         }
 
-        public async Task<ServiceResponse<List<Place>>> GetUserPlaces(int id)
+        public async Task<ServiceResponse<List<GetPlaceDto>>> GetUserPlaces(int id)
         {
-            var response = new ServiceResponse<List<Place>>();
+            var response = new ServiceResponse<List<GetPlaceDto>>();
 
             try
             {
-                User user = await _context.User.Include(s => s.MyPlaces).Where(s => s.Id == id).FirstOrDefaultAsync<User>();
-                response.Data= user.MyPlaces.ToList();
+                User user = await _context.User.FindAsync(id);
+                await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
+
+                List<GetPlaceDto> responseList =  _mapper.Map<List<Place>,List<GetPlaceDto>>(user.MyPlaces.ToList());
+                response.Data = responseList;
 
                 return response;
             }

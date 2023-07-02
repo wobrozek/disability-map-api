@@ -12,9 +12,7 @@ namespace disability_map.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public Double Latitude { get; set; }
-        [Required]
-        public Double Longitude { get; set; }
+        public string LL { get; set; }
         [Required]
         public string Adress { get; set; }
         [Required]
@@ -22,7 +20,7 @@ namespace disability_map.Models
 
         public PlaceType Type { get; set; }
 
-        public User Owner { get; set; }
+        public User? Owner { get; set; }
         public string? ImagePath { get; set; }
 
         public string? Phone{ get; set; }

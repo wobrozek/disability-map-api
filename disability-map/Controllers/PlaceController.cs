@@ -29,18 +29,18 @@ namespace disability_map.Controllers
             return Ok(await _placeService.CreatePlace(place,userId));
         }
 
-        [HttpDelete, Authorize]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<Score>> DeletePlace(string id)
         {
             int userId = _userService.GetUserId();
-            return Ok(_placeService.DeletePlace(id, userId));
+            return Ok(await _placeService.DeletePlace(id, userId));
         }
 
-        [HttpPut, Authorize]
-        public async Task<ActionResult<Score>> EditPlace(PostPlaceDto place)
+        [HttpPut("{id}"), Authorize]
+        public async Task<ActionResult<Score>> EditPlace(PostPlaceDto place,string id)
         {
             int userId = _userService.GetUserId();
-            return Ok(_placeService.EditPlace(place, userId));
+            return Ok(await _placeService.EditPlace(place, userId ,id));
         }
 
         // GET: PlaceController/Details/5

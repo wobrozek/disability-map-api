@@ -17,8 +17,8 @@ namespace disability_map.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{id}/Places"), Authorize]
-        public async Task<ActionResult<Score>> upvote(string id)
+        [HttpGet("Places"), Authorize]
+        public async Task<ActionResult<Score>> upvote()
         {
             int userId = _userService.GetUserId();
             return Ok(await _userService.GetUserPlaces(userId));
