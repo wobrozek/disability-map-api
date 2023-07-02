@@ -53,20 +53,20 @@ namespace disability_map.Services.PlaceService
                 User user = await _context.User.FindAsync(userId);
                 await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
 
-                if (user.MyPlaces.Any(el=> el.PlaceId == placeId))
+                if (user.MyPlaces.Any(el => el.PlaceId == placeId))
                 {
-                    await _context.Place.Where(t => t.PlaceId == placeId).ExecuteDeleteAsync
+                    await _context.Place.Where(t => t.PlaceId == placeId).ExecuteDeleteAsync();
                     //var placeToDelete =_context.Place.Attach(new Place { PlaceId = placeId });
                     //placeToDelete.State = EntityState.Deleted;
-                    //await _context.SaveChangesAsync();
+                    //    //await _context.SaveChangesAsync();
                 }
                 else
-                {
-                    response.Success = false;
-                    response.Message = "user doesn't have place with that id";
+                    {
+                        response.Success = false;
+                        response.Message = "user doesn't have place with that id";
+                    }
+
                 }
-                
-            }
             catch (Exception er)
             {
                 response.Success = false;
