@@ -6,7 +6,7 @@ namespace disability_map.Services.PlaceService
     public interface IPlaceService
     {
 
-        Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(string placeId, Double radius);
+        Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius , PlaceType? placeType);
 
         Task<ServiceResponse<string>> EditPlace(PostPlaceDto place, int userId, string placeId);
 

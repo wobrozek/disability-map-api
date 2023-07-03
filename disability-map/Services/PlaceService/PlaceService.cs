@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using disability_map.Data;
 using disability_map.Dtos;
 using disability_map.Models;
@@ -56,9 +55,6 @@ namespace disability_map.Services.PlaceService
                 if (user.MyPlaces.Any(el => el.PlaceId == placeId))
                 {
                     await _context.Place.Where(t => t.PlaceId == placeId).ExecuteDeleteAsync();
-                    //var placeToDelete =_context.Place.Attach(new Place { PlaceId = placeId });
-                    //placeToDelete.State = EntityState.Deleted;
-                    //    //await _context.SaveChangesAsync();
                 }
                 else
                     {
@@ -85,19 +81,21 @@ namespace disability_map.Services.PlaceService
                 User user = await _context.User.FindAsync(userId);
                 await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
 
-                if (user.MyPlaces.Any(el => el.PlaceId == placeId))
-                {
-                    Place newPlace = _mapper.Map<Place>(place);
-                    _context.Place.Attach(newPlace);
+                var oldPlace = user.MyPlaces.FirstOrDefault(e => e.PlaceId == placeId);
 
-                    await _context.SaveChangesAsync();
-                    response.Data = newPlace.PlaceId;
-                }
-                else
+                if (oldPlace is null)
                 {
                     response.Success = false;
-                    response.Message = "user doesn't have place with that id";
+                    response.Message = "place with that id doesn't exist";
+                    return response;
                 }
+
+                oldPlace = _mapper.Map<PostPlaceDto,Place>(place,oldPlace);
+
+                await _context.SaveChangesAsync();
+
+                response.Data = oldPlace.PlaceId;
+                
             }
             catch (Exception er)
             {
@@ -108,7 +106,7 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(string placeId, double radius)
+        public Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius, PlaceType? placeType)
         {
             throw new NotImplementedException();
         }

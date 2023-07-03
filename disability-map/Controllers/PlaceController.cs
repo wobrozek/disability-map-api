@@ -43,73 +43,12 @@ namespace disability_map.Controllers
             return Ok(await _placeService.EditPlace(place, userId ,id));
         }
 
-        // GET: PlaceController/Details/5
-        //public ActionResult Details(int id)
+        //[HttpGet]
+        //public async Task<ActionResult<List<Place>>> GetPlaceByRadius()
         //{
-        //    return View();
+        //    return Ok(await _placeService.GetPlacesByRadius());
         //}
 
-        //// GET: PlaceController/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
 
-        //// POST: PlaceController/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: PlaceController/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: PlaceController/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: PlaceController/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: PlaceController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //private ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }
