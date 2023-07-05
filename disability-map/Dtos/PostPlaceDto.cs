@@ -6,7 +6,7 @@ namespace disability_map.Dtos
     {
         public string Name { get; set; }
 
-        public string LL { get; set; }  
+        public Double[] LL { get; set; }
 
         public string Adress { get; set; }
 

@@ -12,7 +12,7 @@ namespace disability_map.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string LL { get; set; }
+        public Cords? Cords { get; set; }
         [Required]
         public string Adress { get; set; }
         [Required]

@@ -3,6 +3,6 @@
     public class GetPlacesDto
     {
         public string PlaceId { get; set; }
-        public string ll { get; set; }
+        public Double[] LL { get; set; }
     }
 }

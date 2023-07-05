@@ -4,6 +4,9 @@ using disability_map.Dtos;
 using disability_map.Models;
 using disability_map.Services.UserService;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Net.Http.Json;
 
 namespace disability_map.Services.PlaceService
 {
@@ -26,18 +29,26 @@ namespace disability_map.Services.PlaceService
             {
                 User user = await _context.User.FindAsync(userId);
 
-      
+                Cords placeCords = new Cords()
+                {
+                    Longitude = place.LL[0],
+                    Latitude = place.LL[1]
+                };
+
                 Place newPlace = _mapper.Map<Place>(place);
 
+                //insert relacions
+                newPlace.Cords= placeCords;
                 newPlace.Owner = user;
+
                 await _context.Place.AddAsync(newPlace);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 response.Data = newPlace.PlaceId;
             }
             catch(Exception er)
             {
                 response.Success = false;
-                response.Message = er.Message;
+                response.Message = er.InnerException.Message;
             }
 
             return response;

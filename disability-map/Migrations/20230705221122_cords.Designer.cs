@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using disability_map.Data;
 
@@ -11,9 +12,11 @@ using disability_map.Data;
 namespace disability_map.Migrations
 {
     [DbContext(typeof(DbMainContext))]
-    partial class DbMainContextModelSnapshot : ModelSnapshot
+    [Migration("20230705221122_cords")]
+    partial class cords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,7 +195,7 @@ namespace disability_map.Migrations
             modelBuilder.Entity("disability_map.Models.Cords", b =>
                 {
                     b.HasOne("disability_map.Models.Place", "Place")
-                        .WithOne("Cords")
+                        .WithOne("LL")
                         .HasForeignKey("disability_map.Models.Cords", "PlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -211,7 +214,7 @@ namespace disability_map.Migrations
 
             modelBuilder.Entity("disability_map.Models.Place", b =>
                 {
-                    b.Navigation("Cords")
+                    b.Navigation("LL")
                         .IsRequired();
                 });
 

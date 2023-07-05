@@ -1,5 +1,6 @@
 ﻿using disability_map.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace disability_map.Data
 {
@@ -13,6 +14,8 @@ namespace disability_map.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // place - score
 
             modelBuilder
                .Entity<Score>()
@@ -33,6 +36,15 @@ namespace disability_map.Data
                 .Entity<User>()
                 .HasMany(e => e.Likes)
                 .WithMany(e => e.Likes);
+
+            // cords - place
+
+            modelBuilder
+                .Entity<Place>()
+                .HasOne(e=> e.Cords)
+                .WithOne(e => e.Place)
+                .HasForeignKey<Cords>(e => e.PlaceId)
+                .IsRequired();
 
         }
 
