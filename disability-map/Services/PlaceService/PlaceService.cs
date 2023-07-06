@@ -129,12 +129,20 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius, PlaceType? placeType)
+        public async Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius, PlaceType? placeType)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<List<Place>>();
 
 
-                         
+            var result = await (from place in _context.Place
+                         where (Math.Abs(place.Cords.Latitude - ll[0]) <= radius) &&
+                         (Math.Abs(place.Cords.Longitude - ll[1]) <= radius) &&
+                         (placeType == null ? true : place.Type==placeType)
+                         select place).ToListAsync();
+
+            response.Data = result;
+
+            return response;
         }
 
         public static async Task<string> UploadToAzureIfPhotoExists(IImageDto dto, BlobServiceClient blobServiceClient)
