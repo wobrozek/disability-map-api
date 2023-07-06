@@ -35,7 +35,7 @@ namespace Testy
             var mapper = config.CreateMapper();
 
             //act
-            var placeService = new PlaceService(mapper,context);
+            //var placeService = new PlaceService(mapper,context);
 
             //var placeDto = new PostPlaceDto()
             //{

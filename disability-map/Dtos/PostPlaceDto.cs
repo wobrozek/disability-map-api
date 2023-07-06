@@ -2,7 +2,7 @@
 
 namespace disability_map.Dtos
 {
-    public class PostPlaceDto
+    public class PostPlaceDto : IImageDto
     {
         public string Name { get; set; }
 
@@ -14,7 +14,7 @@ namespace disability_map.Dtos
 
         public PlaceType Type { get; set; }
 
-        public string? ImagePath { get; set; }
+        public IFormFile? Image{ get; set; }
 
         public string? Phone { get; set; }
         public string? Email { get; set; }

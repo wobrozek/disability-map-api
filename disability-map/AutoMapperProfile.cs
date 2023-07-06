@@ -9,7 +9,11 @@ namespace disability_map
         public AutoMapperProfile()
         {
             CreateMap<Place, PostPlaceDto>().ReverseMap();
-            CreateMap<Place, GetPlaceDto>().ReverseMap();
+            //CreateMap<Place, GetPlaceDto>().ForMember(dest => dest.LL, opt => opt.MapFrom(src => src.Cords)).ReverseMap();
+            CreateMap<Place, CordsDto>().ReverseMap();
+            CreateMap<Cords, CordsDto>().ReverseMap();
+            CreateMap<Place, GetPlaceDto>().ForMember(dest => dest.LL, opt => opt.MapFrom(src => src.Cords)).ReverseMap();
+
         }
     }
 }

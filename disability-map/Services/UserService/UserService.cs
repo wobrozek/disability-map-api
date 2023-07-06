@@ -35,9 +35,9 @@ namespace disability_map.Services.UserService
             try
             {
                 User user = await _context.User.FindAsync(id);
-                await _context.Entry(user).Collection(p => p.MyPlaces).Query().LoadAsync();
+                await _context.Entry(user).Collection(p => p.MyPlaces).Query().Include(p => p.Cords).LoadAsync();
 
-                List<GetPlaceDto> responseList =  _mapper.Map<List<Place>,List<GetPlaceDto>>(user.MyPlaces.ToList());
+                List<GetPlaceDto> responseList =  _mapper.Map<List<Place>,List<GetPlaceDto>>(user.MyPlaces);
                 response.Data = responseList;
 
                 return response;

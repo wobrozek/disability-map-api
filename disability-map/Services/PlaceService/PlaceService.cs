@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Net.Http.Json;
+using Azure.Storage.Blobs;
 
 namespace disability_map.Services.PlaceService
 {
@@ -14,11 +15,13 @@ namespace disability_map.Services.PlaceService
     {
         private readonly IMapper _mapper;
         private readonly DbMainContext _context;
+        private readonly BlobServiceClient _blobServiceClient;
 
-        public PlaceService(IMapper mapper, DbMainContext context)
+        public PlaceService(IMapper mapper, DbMainContext context, BlobServiceClient blobServiceClient)
         {
             _mapper = mapper;
             _context = context;
+            _blobServiceClient = blobServiceClient;
         }
 
         public async Task<ServiceResponse<string>> CreatePlace(PostPlaceDto place,int userId)
@@ -27,6 +30,12 @@ namespace disability_map.Services.PlaceService
 
             try
             {
+                if (place.LL.Length < 2)
+                {
+                    response.Success = false;
+                    response.Message = "parametr ll is not a list";
+                }
+
                 User user = await _context.User.FindAsync(userId);
 
                 Cords placeCords = new Cords()
@@ -40,15 +49,17 @@ namespace disability_map.Services.PlaceService
                 //insert relacions
                 newPlace.Cords= placeCords;
                 newPlace.Owner = user;
+                newPlace.ImagePath = await UploadToAzureIfPhotoExists(place, _blobServiceClient);
 
                 await _context.Place.AddAsync(newPlace);
                 await _context.SaveChangesAsync();
+
                 response.Data = newPlace.PlaceId;
             }
             catch(Exception er)
             {
                 response.Success = false;
-                response.Message = er.InnerException.Message;
+                response.Message = er.Message;
             }
 
             return response;
@@ -102,6 +113,7 @@ namespace disability_map.Services.PlaceService
                 }
 
                 oldPlace = _mapper.Map<PostPlaceDto,Place>(place,oldPlace);
+                oldPlace.ImagePath = await UploadToAzureIfPhotoExists(place, _blobServiceClient);
 
                 await _context.SaveChangesAsync();
 
@@ -119,7 +131,27 @@ namespace disability_map.Services.PlaceService
 
         public Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius, PlaceType? placeType)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>();
+
+
+                         
+        }
+
+        public static async Task<string> UploadToAzureIfPhotoExists(IImageDto dto, BlobServiceClient blobServiceClient)
+        {
+            if (dto.Image is not null)
+            {
+                string blobName = Nanoid.Nanoid.Generate();
+
+                //upload to azure
+                var containerInstance = blobServiceClient.GetBlobContainerClient("images");
+                var blobInstance = containerInstance.GetBlobClient(blobName);
+                await blobInstance.UploadAsync(dto.Image.OpenReadStream());
+
+                return "https://<storage_account_name>.blob.core.windows.net/images/" + blobName;
+            }
+
+            return "";
         }
     }
 }

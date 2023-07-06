@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Azure.Storage.Blobs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +20,12 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddCors();
+// configure azure blob storage
+builder.Services.AddScoped(_ =>
+{
+    return new BlobServiceClient(builder.Configuration.GetConnectionString("BlobStorage"));
+});
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
