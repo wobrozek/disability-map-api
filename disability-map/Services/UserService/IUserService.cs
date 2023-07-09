@@ -8,5 +8,6 @@ namespace disability_map.Services.UserService
         int GetUserId();
 
         Task<ServiceResponse<List<GetPlaceDto>>> GetUserPlaces(int id);
+        Task<ServiceResponse<int>> PutUser(int id, string imagePath);
     }
 }

@@ -20,7 +20,7 @@ namespace disability_map.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(RegisterUserDto request)
         {
             var response = await _authRepo.Register(
-                new User { Email = request.Email, Login= request.Login }, request.Password
+                new User { Email = request.Email, Login= request.Login , ImagePath = request.ImagePath }, request.Password
             );
             if (!response.Success)
             {

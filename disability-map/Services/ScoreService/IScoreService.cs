@@ -8,5 +8,6 @@ namespace disability_map.Services.ScoreService
         Task<ServiceResponse<GetScoreDto>> GetScoreById(string id);
         Task<ServiceResponse<int>> upVote(string id, int userId);
         Task<ServiceResponse<int>> downVote(string id, int userId);
+        Task<ServiceResponse<List<GetScoreDto>>> GetListOfScoreById(List<string> id);
     }
 }

@@ -28,6 +28,28 @@ namespace disability_map.Services.UserService
                 
         }
 
+        public async Task<ServiceResponse<int>> PutUser(int id,string imagePath)
+        {
+            ServiceResponse<int> response = new ServiceResponse<int>();
+            try
+            {
+                var user = await _context.User.FindAsync(id);
+                user.ImagePath = imagePath;
+
+                await _context.SaveChangesAsync();
+
+                response.Data = id;
+            }
+            catch(Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message; 
+            }
+            
+
+            return response;
+        }
+
         public async Task<ServiceResponse<List<GetPlaceDto>>> GetUserPlaces(int id)
         {
             var response = new ServiceResponse<List<GetPlaceDto>>();

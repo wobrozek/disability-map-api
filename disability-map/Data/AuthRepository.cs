@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Drawing;
 using System.Linq.Expressions;
+using disability_map.Dtos;
 
 namespace disability_map.Data
 {
@@ -18,9 +19,9 @@ namespace disability_map.Data
             _context = context;
 
         }
-        public async Task<ServiceResponse<string>> Login(string login, string password)
+        public async Task<ServiceResponse<UserDataDto>> Login(string login, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<UserDataDto>();
             var user = await _context.User
                 .FirstOrDefaultAsync(u => u.Login.ToLower().Equals(login.ToLower()));
             if (user is null)
@@ -35,7 +36,8 @@ namespace disability_map.Data
             }
             else
             {
-                response.Data = CreateToken(user);
+                UserDataDto responseUser = new UserDataDto() { ImagePath = user.ImagePath, Login = user.Login, Token = CreateToken(user) };
+                response.Data = responseUser;
             }
 
             return response;
@@ -130,10 +132,5 @@ namespace disability_map.Data
             return tokenHandler.WriteToken(token);
         }
 
-        private void createImage(User user)
-        {
-            
-            
-        }
     }
 }

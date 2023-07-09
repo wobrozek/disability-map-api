@@ -15,15 +15,25 @@ namespace disability_map.Services.ScoreService
             _mapper = mapper;
             _context = context;
         }
+        public async Task<ServiceResponse<List<GetScoreDto>>> GetListOfScoreById(List<string> idList)
+        {
+            var response = new ServiceResponse<List<GetScoreDto>>();
 
-        public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id)
+            foreach(string id in idList)
+            {
+                var score = await GetScoreById(id);
+                response.Data.Add(score.Data);
+            }
+
+            return response;
+
+        }
+            public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id)
         {
             var response = new ServiceResponse<GetScoreDto>();
 
             var element = await _context.Score.FindAsync(id);
             
-            
-
             if (element is not null)
             {
                 await _context.Entry(element).Collection(p => p.Likes).Query().LoadAsync();
