@@ -31,6 +31,12 @@ namespace disability_map.Controllers
            return Ok(await _scoreService.GetScoreById(id));
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Score>>> ScoreByListOfId([FromQuery] List<string> listId)
+        {
+            return Ok(await _scoreService.GetListOfScoreById(listId));
+        }
+
         [HttpPut("upvote/{id}"), Authorize]
         public async Task<ActionResult<Score>> upvote(string id)
         {

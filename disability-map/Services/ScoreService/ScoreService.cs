@@ -18,6 +18,7 @@ namespace disability_map.Services.ScoreService
         public async Task<ServiceResponse<List<GetScoreDto>>> GetListOfScoreById(List<string> idList)
         {
             var response = new ServiceResponse<List<GetScoreDto>>();
+            response.Data = new List<GetScoreDto>();
 
             foreach(string id in idList)
             {
