@@ -40,8 +40,8 @@ namespace disability_map.Services.PlaceService
 
                 Cords placeCords = new Cords()
                 {
-                    Longitude = place.LL[0],
-                    Latitude = place.LL[1]
+                    Latitude = place.LL[0],
+                    Longitude = place.LL[1]
                 };
 
                 Place newPlace = _mapper.Map<Place>(place);
@@ -49,7 +49,6 @@ namespace disability_map.Services.PlaceService
                 //insert relacions
                 newPlace.Cords= placeCords;
                 newPlace.Owner = user;
-                newPlace.ImagePath = await UploadToAzureIfPhotoExists(place, _blobServiceClient);
 
                 await _context.Place.AddAsync(newPlace);
                 await _context.SaveChangesAsync();
@@ -113,7 +112,6 @@ namespace disability_map.Services.PlaceService
                 }
 
                 oldPlace = _mapper.Map<PostPlaceDto,Place>(place,oldPlace);
-                oldPlace.ImagePath = await UploadToAzureIfPhotoExists(place, _blobServiceClient);
 
                 await _context.SaveChangesAsync();
 
@@ -129,37 +127,22 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public async Task<ServiceResponse<List<Place>>> GetPlacesByRadius(List<double> ll, Double radius, PlaceType? placeType)
+        public async Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(List<double> ll, int _radius, PlaceType? placeType)
         {
-            var response = new ServiceResponse<List<Place>>();
-
+            var response = new ServiceResponse<List<GetPlaceDto>>();
+            Double radius = _radius / 10000; 
 
             var result = await (from place in _context.Place
                          where (Math.Abs(place.Cords.Latitude - ll[0]) <= radius) &&
                          (Math.Abs(place.Cords.Longitude - ll[1]) <= radius) &&
                          (placeType == null ? true : place.Type==placeType)
-                         select place).ToListAsync();
+                         select place).Include(b => b.Cords).ToListAsync();
 
-            response.Data = result;
+            List<GetPlaceDto> responseList = _mapper.Map<List<Place>, List<GetPlaceDto>>(result);
+
+            response.Data = responseList;
 
             return response;
-        }
-
-        public static async Task<string> UploadToAzureIfPhotoExists(IImageDto dto, BlobServiceClient blobServiceClient)
-        {
-            if (dto.Image is not null)
-            {
-                string blobName = Nanoid.Nanoid.Generate();
-
-                //upload to azure
-                var containerInstance = blobServiceClient.GetBlobContainerClient("images");
-                var blobInstance = containerInstance.GetBlobClient(blobName);
-                await blobInstance.UploadAsync(dto.Image.OpenReadStream());
-
-                return "https://<storage_account_name>.blob.core.windows.net/images/" + blobName;
-            }
-
-            return "";
         }
     }
 }

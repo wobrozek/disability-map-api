@@ -43,11 +43,11 @@ namespace disability_map.Controllers
             return Ok(await _placeService.EditPlace(place, userId ,id));
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<Place>>> GetPlaceByRadius()
-        //{
-        //    return Ok(await _placeService.GetPlacesByRadius());
-        //}
+        [HttpGet("GetByRadius")]
+        public async Task<ActionResult<List<Place>>> GetPlaceByRadius([FromQuery] GetByRadiusDto radiusDto)
+        {
+            return Ok(await _placeService.GetPlacesByRadius(radiusDto.LL, radiusDto.Radius,radiusDto.PlaceType));
+        }
 
 
     }
