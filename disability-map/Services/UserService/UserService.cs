@@ -72,5 +72,13 @@ namespace disability_map.Services.UserService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<GetReservationByUser>>> GetUserReservations(int id)
+        {
+            var response = new ServiceResponse<List<GetReservationByUser>>();
+
+            return response;
+        }
+
     }
 }

@@ -144,5 +144,12 @@ namespace disability_map.Services.PlaceService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<GetReservationByPlace>>> GetUPlaceReservations(int id)
+        {
+            var response = new ServiceResponse<List<GetReservationByPlace>>();
+
+            return response;
+        }
     }
 }

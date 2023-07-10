@@ -14,7 +14,7 @@ using disability_map.Services.PhotoService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("AzureServer"),
+builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"),
     builder => builder.EnableRetryOnFailure()));
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

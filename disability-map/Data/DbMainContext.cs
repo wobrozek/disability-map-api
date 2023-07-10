@@ -46,6 +46,22 @@ namespace disability_map.Data
                 .HasForeignKey<Cords>(e => e.PlaceId)
                 .IsRequired();
 
+            // reservations - place
+
+            modelBuilder.Entity<Place>()
+                .HasMany(e => e.Reservations)
+                .WithOne(e => e.Place)
+                .HasForeignKey(e => e.PlaceId)
+                .IsRequired();
+
+            // reservation - user
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Reservations)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .IsRequired();
+
         }
 
         public DbSet<Place> Place { get; set; }
@@ -53,5 +69,7 @@ namespace disability_map.Data
         public DbSet<User> User { get; set; }
 
         public DbSet<Cords> Cords { get; set; }
+
+        public DbSet<Reservation> Reservations { get; set; }
     }
 }
