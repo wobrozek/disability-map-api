@@ -6,6 +6,6 @@ namespace disability_map.Dtos
     {
         public List<Double> LL { get; set; }
         public int Radius { get; set; } = 50;
-        public PlaceType? PlaceType { get; set; }
+        public List<PlaceType>? PlaceType { get; set; } = new();
     }
 }

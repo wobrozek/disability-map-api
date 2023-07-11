@@ -127,17 +127,20 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(List<double> ll, int _radius, PlaceType? placeType)
+        public async Task<ServiceResponse<List<GetPlaceDto>>> GetPlacesByRadius(List<double> ll, int _radius, List<PlaceType>? placeType)
         {
             var response = new ServiceResponse<List<GetPlaceDto>>();
             Double radius = _radius / 10000; 
 
             var result = await (from place in _context.Place
                          where (Math.Abs(place.Cords.Latitude - ll[0]) <= radius) &&
-                         (Math.Abs(place.Cords.Longitude - ll[1]) <= radius) &&
-                         (placeType == null ? true : place.Type==placeType)
-                         select place).Include(b => b.Cords).ToListAsync();
+                         (Math.Abs(place.Cords.Longitude - ll[1]) <= radius)
+                         select place).Include(b => b.Cords).AsNoTracking().ToListAsync();
 
+            if (placeType.Any())
+            {
+                result = result.Where(s => placeType.Any(z => z == s.Type)).ToList();
+           }
             List<GetPlaceDto> responseList = _mapper.Map<List<Place>, List<GetPlaceDto>>(result);
 
             response.Data = responseList;
