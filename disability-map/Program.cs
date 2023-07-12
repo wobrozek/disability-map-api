@@ -10,8 +10,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Azure.Storage.Blobs;
 using disability_map.Services.PhotoService;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"),
@@ -79,6 +81,17 @@ builder.Services.AddAuthentication()
         };
     });
 
+//add quartz
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+});
+
+builder.Services.AddQuartzHostedService(opt =>
+{
+    opt.WaitForJobsToComplete = true;
+});
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -109,4 +122,4 @@ app.MapControllerRoute(
         pattern:"{controller=Access}/{action=Login}/{id?}"
     );
 
-app.Run();
+await app.RunAsync();
