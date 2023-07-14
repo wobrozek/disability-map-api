@@ -23,10 +23,15 @@ namespace disability_map.Services.UserService
         public int GetUserId()
         {
             int result;
+            if(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated == false)return 0;
 
-            return result = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            result = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return result;
                 
         }
+
+ 
 
         public async Task<ServiceResponse<int>> PutUser(int id,string imagePath)
         {

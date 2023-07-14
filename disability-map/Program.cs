@@ -5,12 +5,10 @@ using disability_map.Services.UserService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Azure.Storage.Blobs;
 using disability_map.Services.PhotoService;
-using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,16 +79,6 @@ builder.Services.AddAuthentication()
         };
     });
 
-//add quartz
-builder.Services.AddQuartz(q =>
-{
-    q.UseMicrosoftDependencyInjectionJobFactory();
-});
-
-builder.Services.AddQuartzHostedService(opt =>
-{
-    opt.WaitForJobsToComplete = true;
-});
 
 
 var app = builder.Build();

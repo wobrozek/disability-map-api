@@ -24,17 +24,18 @@ namespace disability_map.Controllers
             _userService = userService;
         }
 
-
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize ,AllowAnonymous]
         public async Task<ActionResult<Score>> ScoreById(string id)
         {
-           return Ok(await _scoreService.GetScoreById(id));
+            int userId = _userService.GetUserId();
+            return Ok(await _scoreService.GetScoreById(id, userId));
         }
 
-        [HttpGet]
+        [HttpGet , Authorize , AllowAnonymous]
         public async Task<ActionResult<List<Score>>> ScoreByListOfId([FromQuery] List<string> listId)
         {
-            return Ok(await _scoreService.GetListOfScoreById(listId));
+            int userId = _userService.GetUserId();
+            return Ok(await _scoreService.GetListOfScoreById(listId, userId));
         }
 
         [HttpPut("upvote/{id}"), Authorize]

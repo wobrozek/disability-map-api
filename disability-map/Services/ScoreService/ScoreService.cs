@@ -15,26 +15,24 @@ namespace disability_map.Services.ScoreService
             _mapper = mapper;
             _context = context;
         }
-        public async Task<ServiceResponse<List<GetScoreDto>>> GetListOfScoreById(List<string> idList)
+        public async Task<ServiceResponse<List<GetScoreDto>>> GetListOfScoreById(List<string> idList, int? userId = 0)
         {
             var response = new ServiceResponse<List<GetScoreDto>>();
             response.Data = new List<GetScoreDto>();
 
             foreach(string id in idList)
             {
-                var score = await GetScoreById(id);
+                var score = await GetScoreById(id,userId);
                 response.Data.Add(score.Data);
             }
 
             return response;
-
         }
-            public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id)
+            public async Task<ServiceResponse<GetScoreDto>> GetScoreById(string id, int? userId = 0)
         {
             var response = new ServiceResponse<GetScoreDto>();
 
             var element = await _context.Score.FindAsync(id);
-            
             if (element is not null)
             {
                 await _context.Entry(element).Collection(p => p.Likes).Query().LoadAsync();
@@ -45,7 +43,23 @@ namespace disability_map.Services.ScoreService
                     PlaceId = element.PlaceId,
                     DisLikes = element.DisLikes.Count(),
                     Likes = element.Likes.Count(),
+                    UserData = 0
                 };
+
+                //check that user have likes or dislikes
+                if(userId != 0)
+                {
+                    if (element.Likes.Any(l => l.Id == userId))
+                    {
+                        scoreDto.UserData = -1;
+                    }
+                    else if (element.DisLikes.Any(l => l.Id == userId))
+                    {
+                        scoreDto.UserData = 1;
+                    }
+                }
+                
+
                 response.Data = scoreDto;
                 return response;
             }
