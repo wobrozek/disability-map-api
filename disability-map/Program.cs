@@ -9,6 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Azure.Storage.Blobs;
 using disability_map.Services.PhotoService;
+using Azure.Messaging.ServiceBus;
+using disability_map.Models;
+using disability_map.Services.ReservationService;
+using disability_map.Services.SmsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +31,17 @@ builder.Services.AddScoped(_ =>
     return new BlobServiceClient(builder.Configuration.GetConnectionString("BlobStorage"));
 });
 
+builder.Services.AddScoped(_ =>
+{
+    return new ServiceBusClient(builder.Configuration.GetConnectionString("ServiceBus"));
+});
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

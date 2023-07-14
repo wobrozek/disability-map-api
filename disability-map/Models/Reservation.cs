@@ -1,4 +1,6 @@
-﻿namespace disability_map.Models
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace disability_map.Models
 {
     public class Reservation
     {
@@ -12,8 +14,8 @@
 
         public User User { get; set; }
 
-        public int UnixTimestamp { get; set; }
+        public long? Seq { get; set; }
 
-        public string Text { get; set; }
+       
     }
 }

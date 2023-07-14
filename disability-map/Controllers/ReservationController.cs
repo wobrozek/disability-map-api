@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace disability_map.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
@@ -27,10 +29,10 @@ namespace disability_map.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<ActionResult<string>> DeleteReservation(PostReservationDto reservation)
+        public async Task<ActionResult<string>> DeleteReservation(long seq)
         {
             int userId = _userService.GetUserId();
-            return Ok(await _reservationService.CancelSchedule(reservation, userId));
+            return Ok(await _reservationService.CancelSchedule(seq));
         }
     }
 }

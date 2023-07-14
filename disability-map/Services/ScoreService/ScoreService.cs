@@ -51,11 +51,11 @@ namespace disability_map.Services.ScoreService
                 {
                     if (element.Likes.Any(l => l.Id == userId))
                     {
-                        scoreDto.UserData = -1;
+                        scoreDto.UserData = 1;
                     }
                     else if (element.DisLikes.Any(l => l.Id == userId))
                     {
-                        scoreDto.UserData = 1;
+                        scoreDto.UserData = -1;
                     }
                 }
                 
@@ -105,7 +105,7 @@ namespace disability_map.Services.ScoreService
                     return response;
                 }
 
-                deleteIfExistAsync(user, scoreElement.DisLikes);
+                await deleteIfExistAsync(user, scoreElement.DisLikes);
                 bool toUpvote = await deleteIfExistAsync(user, scoreElement.Likes);
 
                 if (!toUpvote)
@@ -152,7 +152,7 @@ namespace disability_map.Services.ScoreService
                 await _context.Entry(scoreElement).Collection(p => p.Likes).Query().LoadAsync();
                 await _context.Entry(scoreElement).Collection(p => p.DisLikes).Query().LoadAsync();
 
-                deleteIfExistAsync(user, scoreElement.Likes);
+                await deleteIfExistAsync(user, scoreElement.Likes);
                 bool toDisLike = await deleteIfExistAsync(user, scoreElement.DisLikes);
 
                 if (!toDisLike)

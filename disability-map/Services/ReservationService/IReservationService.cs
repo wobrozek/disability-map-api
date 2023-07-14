@@ -5,7 +5,7 @@ namespace disability_map.Services.SmsService
 {
     public interface IReservationService
     {
-        Task<ServiceResponse<int>> AddSchedule(PostReservationDto reservation, int userId);
-        Task<ServiceResponse<int>> CancelSchedule(PostReservationDto reservation, int userId);
+        Task<ServiceResponse<long>> AddSchedule(PostReservationDto reservation, int userId);
+        Task<ServiceResponse<int>> CancelSchedule(long seq);
     }
 }
