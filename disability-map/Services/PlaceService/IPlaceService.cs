@@ -13,6 +13,6 @@ namespace disability_map.Services.PlaceService
         Task<ServiceResponse<string>> DeletePlace(string placeId, int userId);
 
         Task<ServiceResponse<string>> CreatePlace(PostPlaceDto place, int userId);
-        Task<ServiceResponse<List<GetReservationByPlace>>> GetUPlaceReservations(int id);
+        Task<ServiceResponse<List<GetReservationByPlace>>> GetPlaceReservations(string placeId);
     }
 }

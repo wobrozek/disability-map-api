@@ -4,7 +4,7 @@ namespace disability_map.Dtos
 {
     public class GetReservationByPlace
     {
-        public User User{ get; set; }
+        public UserContactDto User{ get; set; }
         public int UnixTimestamp { get; set; }
     }
 }

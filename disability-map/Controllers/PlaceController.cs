@@ -49,6 +49,12 @@ namespace disability_map.Controllers
             return Ok(await _placeService.GetPlacesByRadius(radiusDto.LL, radiusDto.Radius,radiusDto.PlaceType));
         }
 
+        [HttpGet("{id}/Reservations")]
+        public async Task<ActionResult<List<Place>>> GetPlaceReservations(string id)
+        {
+            return Ok(await _placeService.GetPlaceReservations(id));
+        }
+
 
     }
 }

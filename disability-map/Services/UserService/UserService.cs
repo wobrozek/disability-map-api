@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Messaging.ServiceBus;
 using disability_map.Data;
 using disability_map.Dtos;
 using disability_map.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace disability_map.Services.UserService
 {
@@ -78,9 +80,25 @@ namespace disability_map.Services.UserService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetReservationByUser>>> GetUserReservations(int id)
+        public async Task<ServiceResponse<List<GetReservationByUser>>> GetUserReservations(int userId)
         {
             var response = new ServiceResponse<List<GetReservationByUser>>();
+            try
+            {
+                User user = await _context.User.FindAsync(userId);
+                await _context.Entry(user).Collection(p => p.Reservations).Query().AsNoTracking().LoadAsync();
+
+                List<GetReservationByUser> responseList = _mapper.Map<List<Reservation>, List<GetReservationByUser>>(user.Reservations);
+                response.Data = responseList;
+
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
             return response;
         }

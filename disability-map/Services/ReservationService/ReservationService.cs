@@ -1,8 +1,10 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using Azure;
+using Azure.Messaging.ServiceBus;
 using disability_map.Data;
 using disability_map.Dtos;
 using disability_map.Models;
 using disability_map.Services.SmsService;
+using Microsoft.EntityFrameworkCore;
 
 namespace disability_map.Services.ReservationService
 {
@@ -28,11 +30,16 @@ namespace disability_map.Services.ReservationService
                 Reservation newMapperReservation = new Reservation()
                 {
                     PlaceId = reservation.PlaceId,
-                    UserId = userId
+                    UserId = userId,
+                    UnixTimestamp = reservation.UnixTimestamp
+                    
                 };
                 var newReservation = await _context.Reservations.AddAsync(newMapperReservation);
 
+                _context.SaveChanges();
+
                 //send message
+
                 var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
                 ServiceBusMessage message = new ServiceBusMessage("sms");
 
@@ -40,7 +47,7 @@ namespace disability_map.Services.ReservationService
 
 
                 //save seq
-                newReservation.Seq = seq;
+                newReservation.Entity.Seq = seq;
 
                 _context.SaveChanges();
 
@@ -55,10 +62,23 @@ namespace disability_map.Services.ReservationService
             return response;
         }
 
-        public Task<ServiceResponse<int>> CancelSchedule(long seq)
+        public async Task<ServiceResponse<int>> CancelSchedule(long seq)
         {
-            var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
-            serviceSender.CancelScheduledMessageAsync(seq);
+            var response = new ServiceResponse<int>();
+            try
+            {
+                var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
+                serviceSender.CancelScheduledMessageAsync(seq);
+
+                var toDelete = await _context.Reservations.Where(s => s.Seq == seq).ExecuteDeleteAsync();
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
         }
 
     }

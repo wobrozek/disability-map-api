@@ -31,5 +31,12 @@ namespace disability_map.Controllers
             int userId = _userService.GetUserId();
             return Ok(await _userService.PutUser(userId, imagePath));
         }
+
+        [HttpGet("Reservations"), Authorize]
+        public async Task<ActionResult<ServiceResponse<int>>> GetUserReservations()
+        {
+            int userId = _userService.GetUserId();
+            return Ok(await _userService.GetUserReservations(userId));
+        }
     }
 }

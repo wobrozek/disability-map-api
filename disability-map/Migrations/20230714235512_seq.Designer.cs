@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using disability_map.Data;
 
@@ -11,9 +12,11 @@ using disability_map.Data;
 namespace disability_map.Migrations
 {
     [DbContext(typeof(DbMainContext))]
-    partial class DbMainContextModelSnapshot : ModelSnapshot
+    [Migration("20230714235512_seq")]
+    partial class seq
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,9 +134,6 @@ namespace disability_map.Migrations
 
                     b.Property<long?>("Seq")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("UnixTimestamp")
-                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

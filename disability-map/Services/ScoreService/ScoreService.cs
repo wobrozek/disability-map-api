@@ -35,8 +35,8 @@ namespace disability_map.Services.ScoreService
             var element = await _context.Score.FindAsync(id);
             if (element is not null)
             {
-                await _context.Entry(element).Collection(p => p.Likes).Query().LoadAsync();
-                await _context.Entry(element).Collection(p => p.DisLikes).Query().LoadAsync();
+                await _context.Entry(element).Collection(p => p.Likes).Query().AsNoTracking().LoadAsync();
+                await _context.Entry(element).Collection(p => p.DisLikes).Query().AsNoTracking().LoadAsync();
 
                 var scoreDto = new GetScoreDto()
                 {

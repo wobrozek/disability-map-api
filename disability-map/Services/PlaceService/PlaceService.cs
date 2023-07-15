@@ -148,9 +148,25 @@ namespace disability_map.Services.PlaceService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetReservationByPlace>>> GetUPlaceReservations(int id)
+        public async Task<ServiceResponse<List<GetReservationByPlace>>> GetPlaceReservations(string placeId)
         {
             var response = new ServiceResponse<List<GetReservationByPlace>>();
+            try
+            {
+                Place place = await _context.Place.FindAsync(placeId);
+                await _context.Entry(place).Collection(p => p.Reservations).Query().AsNoTracking().LoadAsync();
+
+                List<GetReservationByPlace> responseList = _mapper.Map<List<Reservation>, List<GetReservationByPlace>>(place.Reservations);
+                response.Data = responseList;
+
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
             return response;
         }

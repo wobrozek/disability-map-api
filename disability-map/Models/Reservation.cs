@@ -14,8 +14,11 @@ namespace disability_map.Models
 
         public User User { get; set; }
 
+        public int UnixTimestamp { get; set; }
         public long? Seq { get; set; }
 
-       
+        
+
+
     }
 }
