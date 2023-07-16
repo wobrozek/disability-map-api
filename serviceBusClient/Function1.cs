@@ -3,7 +3,10 @@ using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Web;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 
 namespace serviceBusClient
 {
@@ -20,19 +23,25 @@ namespace serviceBusClient
         public async Task Run([ServiceBusTrigger("sms-queqe", Connection = "BusConnect")] string myQueueItem)
         {
             _logger.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
+            var config = new ConfigurationBuilder().AddJsonFile("local.settings.json").Build();
 
             Sms sms = JsonSerializer.Deserialize<Sms>(myQueueItem);
 
-            HttpClient client = new HttpClient();
+            //var client = new RestClient("https://api.smsapi.pl/sms.do");
 
-            var query = HttpUtility.ParseQueryString("https://api.smsapi.pl/sms.do");
-            query["foo"] = "bar<>&-baz";
-            query["bar"] = "bazinga";
-            string queryString = query.ToString();
+            var request = new RestRequest("https://api.smsapi.pl/sms.do", Method.Post);
+            request.AddQueryParameter("auth_token", System.Environment.GetEnvironmentVariable("Token"));
+            request.AddQueryParameter("to", sms.Phone);
+            request.AddQueryParameter("from", "test");
+            request.AddQueryParameter("message", sms.Message);
+            request.AddQueryParameter("format", "json");
 
-            var response = await client.GetAsync("");
+        
 
-            
+
+
+
+
 
 
 
