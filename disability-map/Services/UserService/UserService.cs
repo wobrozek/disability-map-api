@@ -64,7 +64,7 @@ namespace disability_map.Services.UserService
             try
             {
                 User user = await _context.User.FindAsync(id);
-                await _context.Entry(user).Collection(p => p.MyPlaces).Query().Include(p => p.Cords).AsNoTracking().LoadAsync();
+                await _context.Entry(user).Collection(p => p.MyPlaces).Query().Include(p => p.Cords).LoadAsync();
 
                 List<GetPlaceDto> responseList =  _mapper.Map<List<Place>,List<GetPlaceDto>>(user.MyPlaces);
                 response.Data = responseList;
@@ -86,7 +86,7 @@ namespace disability_map.Services.UserService
             try
             {
                 User user = await _context.User.FindAsync(userId);
-                await _context.Entry(user).Collection(p => p.Reservations).Query().AsNoTracking().LoadAsync();
+                await _context.Entry(user).Collection(p => p.Reservations).Query().Include(p => p.Place).ThenInclude(p => p.Cords).LoadAsync();
 
                 List<GetReservationByUser> responseList = _mapper.Map<List<Reservation>, List<GetReservationByUser>>(user.Reservations);
                 response.Data = responseList;

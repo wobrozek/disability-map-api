@@ -41,7 +41,7 @@ namespace disability_map.Services.ReservationService
                 //send message
 
                 var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
-                ServiceBusMessage message = new ServiceBusMessage("sms");
+                ServiceBusMessage message = new ServiceBusMessage(newMapperReservation.Id.ToString());
 
                 long seq = await serviceSender.ScheduleMessageAsync(message, DateTimeOffset.FromUnixTimeSeconds(reservation.UnixTimestamp));
 
@@ -68,7 +68,7 @@ namespace disability_map.Services.ReservationService
             try
             {
                 var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
-                serviceSender.CancelScheduledMessageAsync(seq);
+                await serviceSender.CancelScheduledMessageAsync(seq);
 
                 var toDelete = await _context.Reservations.Where(s => s.Seq == seq).ExecuteDeleteAsync();
             }

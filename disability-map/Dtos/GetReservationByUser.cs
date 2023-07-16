@@ -6,5 +6,7 @@ namespace disability_map.Dtos
     {
         public GetPlaceDto place{ get; set; }
         public int UnixTimestamp { get; set; }
+
+        public long seq { get; set; }
     }
 }

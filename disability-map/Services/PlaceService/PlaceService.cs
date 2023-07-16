@@ -154,7 +154,7 @@ namespace disability_map.Services.PlaceService
             try
             {
                 Place place = await _context.Place.FindAsync(placeId);
-                await _context.Entry(place).Collection(p => p.Reservations).Query().AsNoTracking().LoadAsync();
+                await _context.Entry(place).Collection(p => p.Reservations).Query().Include(p => p.User).LoadAsync();
 
                 List<GetReservationByPlace> responseList = _mapper.Map<List<Reservation>, List<GetReservationByPlace>>(place.Reservations);
                 response.Data = responseList;
