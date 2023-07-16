@@ -8,7 +8,8 @@ namespace disability_map
     {
         public AutoMapperProfile()
         {
- 
+
+            CreateMap<Place, PostPlaceDto>().ReverseMap();
             CreateMap<User, UserContactDto>().ReverseMap();
             CreateMap<Reservation, UserContactDto>().ReverseMap();
             CreateMap<Place, CordsDto>().ReverseMap();
