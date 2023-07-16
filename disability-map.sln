@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "disability-map", "disabilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testy", "Testy\Testy.csproj", "{6A9906B4-670D-421B-A8B0-DAF66DE46696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "serviceBusClient", "serviceBusClient\serviceBusClient.csproj", "{3313354A-315E-4356-B1BC-DC321C74B619}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sms-consumer", "serviceBusClient\sms-consumer.csproj", "{3313354A-315E-4356-B1BC-DC321C74B619}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

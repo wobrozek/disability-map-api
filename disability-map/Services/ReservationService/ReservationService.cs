@@ -2,9 +2,11 @@
 using Azure.Messaging.ServiceBus;
 using disability_map.Data;
 using disability_map.Dtos;
+using disability_map.Migrations;
 using disability_map.Models;
 using disability_map.Services.SmsService;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace disability_map.Services.ReservationService
 {
@@ -40,10 +42,21 @@ namespace disability_map.Services.ReservationService
 
                 //send message
 
-                var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
-                ServiceBusMessage message = new ServiceBusMessage(newMapperReservation.Id.ToString());
+                var place = await _context.Place.FindAsync(reservation.PlaceId);
 
-                long seq = await serviceSender.ScheduleMessageAsync(message, DateTimeOffset.FromUnixTimeSeconds(reservation.UnixTimestamp));
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                dateTime = dateTime.AddSeconds(newMapperReservation.Id).ToLocalTime();
+
+                var sms = new Sms()
+                { 
+                    Message = string.Concat(place.Name," zostało zarezerwowane na godzinę ", dateTime.ToString()),
+                    Phone = place.Phone
+                };
+
+                var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
+                ServiceBusMessage message = new ServiceBusMessage(JsonSerializer.Serialize(sms));
+
+                long seq = await serviceSender.ScheduleMessageAsync(message, DateTimeOffset.FromUnixTimeSeconds(reservation.UnixTimestamp - 300));
 
 
                 //save seq
@@ -67,9 +80,6 @@ namespace disability_map.Services.ReservationService
             var response = new ServiceResponse<int>();
             try
             {
-                var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
-                await serviceSender.CancelScheduledMessageAsync(seq);
-
                 var toDelete = await _context.Reservations.Where(s => s.Seq == seq).ExecuteDeleteAsync();
             }
             catch (Exception ex)
@@ -77,6 +87,9 @@ namespace disability_map.Services.ReservationService
                 response.Success = false;
                 response.Message = ex.Message;
             }
+
+            var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
+            await serviceSender.CancelScheduledMessageAsync(seq);
 
             return response;
         }

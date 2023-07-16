@@ -25,7 +25,7 @@ namespace disability_map.Models
         public List<Reservation>? Reservations { get; set; } = new();
         public string? ImagePath { get; set; }
 
-        public string? Phone{ get; set; }
+        public string Phone{ get; set; }
         public string? Email { get; set; }
 
   
