@@ -30,4 +30,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.31.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\AuthRepository\" />
+    <Folder Include="Repositories\ScoreRepository\" />
+    <Folder Include="Repositories\PlaceRepository\" />
+    <Folder Include="Repositories\Nowy folder\" />
+  </ItemGroup>
+
 </Project>
