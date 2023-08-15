@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Nanoid;
 
 namespace disability_map.Models
 {
@@ -9,7 +8,7 @@ namespace disability_map.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string PlaceId { get; set; } = Nanoid.Nanoid.Generate();
 
-        [Required]
+        [Required, MinLength(3),MaxLength(10)]
         public string Name { get; set; }
         [Required]
         public Cords? Cords { get; set; }
@@ -24,8 +23,10 @@ namespace disability_map.Models
 
         public List<Reservation>? Reservations { get; set; } = new();
         public string? ImagePath { get; set; }
-
+        [Phone]
         public string Phone{ get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string? Email { get; set; }
 
   

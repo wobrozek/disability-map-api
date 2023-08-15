@@ -1,6 +1,6 @@
-﻿using disability_map.Data;
-using disability_map.Dtos;
+﻿using disability_map.Dtos;
 using disability_map.Models;
+using disability_map.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace disability_map.Controllers

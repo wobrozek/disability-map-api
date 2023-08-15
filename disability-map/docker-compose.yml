@@ -1,8 +1,0 @@
-version: "3"
-
-services:
-  sql-server-db:
-    container_name: sql-server-db
-    image: microsoft/mssql-server-linux:2017-latest
-    ports:
-      - "5432:5432"
