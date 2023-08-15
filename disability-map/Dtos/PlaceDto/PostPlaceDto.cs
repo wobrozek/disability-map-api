@@ -1,4 +1,5 @@
-﻿using disability_map.Models;
+﻿using disability_map.DataAnnotations;
+using disability_map.Models;
 
 namespace disability_map.Dtos
 {
@@ -15,7 +16,7 @@ namespace disability_map.Dtos
         public PlaceType Type { get; set; }
 
         public string? ImagePath{ get; set; }
-
+        [PhoneAnnotation]
         public string? Phone { get; set; }
         public string? Email { get; set; }
     }
