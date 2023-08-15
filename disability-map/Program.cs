@@ -13,6 +13,7 @@ using Azure.Messaging.ServiceBus;
 using disability_map.Models;
 using disability_map.Services.ReservationService;
 using disability_map.Services.SmsService;
+using disability_map.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
