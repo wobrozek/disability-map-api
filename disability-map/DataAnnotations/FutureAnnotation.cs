@@ -8,16 +8,13 @@ namespace disability_map.DataAnnotations
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if(value is not null)
-            {
-                DateTime valueTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds((int)value).ToLocalTime();
+            {   
+                //DateTime valueTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds((long)value).ToLocalTime();
+                
 
-                if(valueTime > DateTime.UtcNow)
+                if((long)value < DateTimeOffset.UtcNow.AddMinutes(5).ToUnixTimeSeconds())
                 {
-                    return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Data must be in the future");
+                    return new ValidationResult("Time to reservation is to short or it is in the past");
                 }
             }
             
