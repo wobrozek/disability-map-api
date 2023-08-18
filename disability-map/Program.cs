@@ -105,6 +105,42 @@ app.UseCors(x => x
                                         //.WithOrigins("https://localhost:44351")); // Allow only this origin can also have multiple origins separated with comma
     .AllowCredentials()); // allow credentials
 
+//add seciurity headers
+//https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-Xss-Protection", "DENY");
+    context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+    context.Response.Headers.Add("Content-Type", "application/json");
+    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+    context.Response.Headers.Add("Cashe-Control", "no-store");
+    context.Response.Headers.Add("Feature-Policy",
+    "vibrate 'self' ; " +
+    "camera 'self' ; " +
+    "microphone 'self' ; " +
+    "speaker 'self' https://youtube.com https://www.youtube.com ;" +
+    "geolocation 'self' ; " +
+    "gyroscope 'self' ; " +
+    "magnetometer 'self' ; " +
+    "midi 'self' ; " +
+    "sync-xhr 'self' ; " +
+    "push 'self' ; " +
+    "notifications 'self' ; " +
+    "fullscreen '*' ; " +
+    "payment 'self' ; ");
+
+    context.Response.Headers.Add(
+    "Content-Security-Policy",
+    "frame-ancestors 'none'; "
+    );
+    await next();
+});
+
+// Strict-Transport-Security
+app.UseHsts();
+
 
 app.UseSwagger();
     app.UseSwaggerUI();
