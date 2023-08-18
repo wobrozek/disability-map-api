@@ -75,7 +75,7 @@ namespace disability_map.Services.ReservationService
             return response;
         }
 
-        public async Task<ServiceResponse<int>> CancelSchedule(long seq)
+        public async Task<ServiceResponse<int>> CancelSchedule(long seq, bool deleteFromQueue = true)
         {
             var response = new ServiceResponse<int>();
             try
@@ -87,6 +87,8 @@ namespace disability_map.Services.ReservationService
                 response.Success = false;
                 response.Message = ex.Message;
             }
+
+            if (!deleteFromQueue) return response;
 
             var serviceSender = _serviceBusClient.CreateSender("sms-queqe");
             await serviceSender.CancelScheduledMessageAsync(seq);
