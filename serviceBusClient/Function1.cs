@@ -27,24 +27,16 @@ namespace serviceBusClient
 
             Sms sms = JsonSerializer.Deserialize<Sms>(myQueueItem);
 
+            var client = new RestClient("");
+
             //var client = new RestClient("https://api.smsapi.pl/sms.do");
 
-            var request = new RestRequest("https://api.smsapi.pl/sms.do", Method.Post);
-            request.AddQueryParameter("auth_token", System.Environment.GetEnvironmentVariable("Token"));
-            request.AddQueryParameter("to", sms.Phone);
-            request.AddQueryParameter("from", "test");
-            request.AddQueryParameter("message", sms.Message);
-            request.AddQueryParameter("format", "json");
-
-        
-
-
-
-
-
-
-
-
+            //var request = new RestRequest("https://api.smsapi.pl/sms.do", Method.Post);
+            //request.AddQueryParameter("auth_token", System.Environment.GetEnvironmentVariable("Token"));
+            //request.AddQueryParameter("to", sms.Phone);
+            //request.AddQueryParameter("from", "test");
+            //request.AddQueryParameter("message", sms.Message);
+            //request.AddQueryParameter("format", "json");
         }
     }
 }

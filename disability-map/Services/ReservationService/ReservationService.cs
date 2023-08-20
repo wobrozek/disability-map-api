@@ -80,7 +80,7 @@ namespace disability_map.Services.ReservationService
             var response = new ServiceResponse<int>();
             try
             {
-                var toDelete = await _context.Reservations.Where(s => s.Seq == seq).ExecuteDeleteAsync();
+                await _context.Reservations.Where(s => s.Seq == seq).ExecuteDeleteAsync();
             }
             catch (Exception ex)
             {
