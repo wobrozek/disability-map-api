@@ -29,10 +29,10 @@ namespace disability_map.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<ActionResult<string>> DeleteReservation(long seq)
+        public async Task<ActionResult<string>> DeleteReservation(long seq ,bool DeleteFromQueue = true)
         {
             int userId = _userService.GetUserId();
-            return Ok(await _reservationService.CancelSchedule(seq));
+            return Ok(await _reservationService.CancelSchedule(seq, DeleteFromQueue));
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Web;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -20,12 +21,12 @@ namespace serviceBusClient
         }
 
         [Function("Function1")]
-        public async Task Run([ServiceBusTrigger("sms-queqe", Connection = "BusConnect")] string myQueueItem)
+        public async Task Run([ServiceBusTrigger("sms-queqe", Connection = "ServiceBusConnection")] ServiceBusReceivedMessage myQueueItem)
         {
             _logger.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
             var config = new ConfigurationBuilder().AddJsonFile("local.settings.json").Build();
 
-            Sms sms = JsonSerializer.Deserialize<Sms>(myQueueItem);
+            Sms sms = JsonSerializer.Deserialize<Sms>(myQueueItem.Body);
 
             var client = new RestClient("");
 
