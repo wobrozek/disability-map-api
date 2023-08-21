@@ -1,9 +1,9 @@
-﻿using disability_map.Dtos;
+﻿using disability_map.DataAnnotations;
+using disability_map.Dtos;
 using disability_map.Models;
 using disability_map.Services.PlaceService;
 using disability_map.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace disability_map.Controllers
@@ -23,6 +23,7 @@ namespace disability_map.Controllers
  
 
         [HttpPost,Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<Score>> CreatePlace(PostPlaceDto place)
         {
             int userId = _userService.GetUserId();
@@ -37,6 +38,7 @@ namespace disability_map.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<Score>> EditPlace(PostPlaceDto place,string id)
         {
             int userId = _userService.GetUserId();
@@ -54,7 +56,5 @@ namespace disability_map.Controllers
         {
             return Ok(await _placeService.GetPlaceReservations(id));
         }
-
-
     }
 }

@@ -2,6 +2,7 @@
 using disability_map.Models;
 using disability_map.Data;
 using Microsoft.AspNetCore.Mvc;
+using disability_map.DataAnnotations;
 
 namespace disability_map.Controllers
 {
@@ -17,6 +18,7 @@ namespace disability_map.Controllers
         }
 
         [HttpPost("Register")]
+        [ValidationFilter]
         public async Task<ActionResult<ServiceResponse<int>>> Register(RegisterUserDto request)
         {
             var response = await _authRepo.Register(

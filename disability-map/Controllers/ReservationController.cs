@@ -1,4 +1,5 @@
-﻿using disability_map.Dtos;
+﻿using disability_map.DataAnnotations;
+using disability_map.Dtos;
 using disability_map.Models;
 using disability_map.Services.SmsService;
 using disability_map.Services.UserService;
@@ -22,6 +23,7 @@ namespace disability_map.Controllers
 
 
         [HttpPost, Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<string>> CreateReservation(PostReservationDto reservation)
         {
             int userId = _userService.GetUserId();

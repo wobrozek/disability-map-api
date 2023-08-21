@@ -5,9 +5,8 @@ namespace disability_map.Models
     public class User
     {
         public int Id { get; set; }
-        [Required, MinLength(3), MaxLength(10)]
+        [Required]
         public required string Login { get; set; }
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public required string Email { get; set; }
         public byte[] PasswordHash { get; set; } = new byte[0];
         public byte[] PasswordSalt { get; set; } = new byte[0];

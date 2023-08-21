@@ -14,17 +14,31 @@ using disability_map.Models;
 using disability_map.Services.ReservationService;
 using disability_map.Services.SmsService;
 using disability_map.Data;
+using disability_map.DataAnnotations;
+using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("AzureServer"),
+builder.Services.AddDbContext<DbMainContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"),
     builder => builder.EnableRetryOnFailure()));
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var result = new ValidationFailedServiceResponse(context.ModelState);
+
+        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+
+        return result;
+    };
+});
+
 builder.Services.AddCors();
 // configure azure blob storage
 builder.Services.AddScoped(_ =>

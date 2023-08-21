@@ -1,4 +1,5 @@
-﻿using disability_map.Dtos;
+﻿using disability_map.DataAnnotations;
+using disability_map.Dtos;
 using disability_map.Models;
 using disability_map.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,7 @@ namespace disability_map.Controllers
         }
 
         [HttpPut,Authorize]
+        [ValidationFilter]
         public async Task<ActionResult<ServiceResponse<int>>> PutUser(string imagePath)
         {
             int userId = _userService.GetUserId();
