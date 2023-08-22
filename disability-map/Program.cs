@@ -2,9 +2,7 @@ using disability_map.Data;
 using disability_map.Services.PlaceService;
 using disability_map.Services.ScoreService;
 using disability_map.Services.UserService;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Azure.Storage.Blobs;
@@ -13,9 +11,10 @@ using Azure.Messaging.ServiceBus;
 using disability_map.Models;
 using disability_map.Services.ReservationService;
 using disability_map.Services.SmsService;
-using disability_map.Data;
 using disability_map.DataAnnotations;
 using System.Net.Mime;
+using Lucene.Net.Store.Azure;
+using Microsoft.WindowsAzure.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +40,12 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 
 builder.Services.AddCors();
 // configure azure blob storage
+
+builder.Services.AddScoped(_ =>
+{
+    return CloudStorageAccount.Parse(builder.Configuration.GetConnectionString("BlobStorage"));
+});
+
 builder.Services.AddScoped(_ =>
 {
     return new BlobServiceClient(builder.Configuration.GetConnectionString("BlobStorage"));

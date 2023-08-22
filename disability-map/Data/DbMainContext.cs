@@ -67,9 +67,8 @@ namespace disability_map.Data
         public DbSet<Place> Place { get; set; }
         public DbSet<Score> Score { get; set; }
         public DbSet<User> User { get; set; }
-
         public DbSet<Cords> Cords { get; set; }
-
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<City> City { get; set; }
     }
 }
