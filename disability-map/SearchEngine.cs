@@ -1,13 +1,15 @@
 ﻿using disability_map.Models;
-using Lucene.Net;
 using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Store.Azure;
-using Microsoft.Azure.Amqp.Framing;
 using Microsoft.WindowsAzure.Storage;
-using System.Reflection.Metadata;
+using Document = Lucene.Net.Documents.Document;
+using Lucene.Net.Documents;
+using Lucene.Net.Util;
+using Microsoft.Azure.Amqp.Framing;
+using Microsoft.VisualBasic.FileIO;
+
 
 namespace disability_map
 {
@@ -34,15 +36,13 @@ namespace disability_map
         {
             foreach (City city in cities)
             {
-                var document = new Lucene.Net.Documents.Document
-                {
-                    new StringField("Id",
-                        city.Id,
-                        Field.Store.YES),
-                    new TextField("CityName",
-                        city.CityName,
-                        Field.Store.YES)
-                };
+                Document document = new Document();
+                document.Add(new Field("name",city.CityName.ToString(),Field.Store.YES,Field.Index.ANALYZED,Field.TermVector.NO));
+                document.Add(new Field("latitude", city.Latitude.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.NO));
+                document.Add(new Field("longitude", city.Longitude.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.NO));
+
+                _writer.AddDocument(document);
+                _writer.Close();
             }
         }
     }
