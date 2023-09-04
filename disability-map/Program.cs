@@ -13,8 +13,6 @@ using disability_map.Services.ReservationService;
 using disability_map.Services.SmsService;
 using disability_map.DataAnnotations;
 using System.Net.Mime;
-using Lucene.Net.Store.Azure;
-using Microsoft.WindowsAzure.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,11 +38,6 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 
 builder.Services.AddCors();
 // configure azure blob storage
-
-builder.Services.AddScoped(_ =>
-{
-    return CloudStorageAccount.Parse(builder.Configuration.GetConnectionString("BlobStorage"));
-});
 
 builder.Services.AddScoped(_ =>
 {
@@ -130,7 +123,7 @@ app.UseCors(x => x
 app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Xss-Protection", "DENY");
-    context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+    context.Response.Headers.Add("X-Frame-Options", "DENY");
     context.Response.Headers.Add("Content-Type", "application/json");
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Add("Referrer-Policy", "no-referrer");
