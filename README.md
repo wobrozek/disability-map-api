@@ -1,12 +1,33 @@
 # Disability-map-api
+
+## Table of contents
+
+- [About the Project](#Description)
+- [Used Technologies](#UsedTechnologies)
+- [Used Aure Services](#UsedAureServices)
+- [Endpoints](#Endpoints)
+- [UI](#UI)
+
+
 # Description
-This is Backend part of project if you want to see finall result go to:
+Aplication provides a map on which user can check, add and rate places comfortable to people with disabilities. Users can also make a reservation on facility.
+Markers on the map indicate the type of place and accessibility rating. The application enables geolocation.
+
+This is Backend part of project if you want to see React Single Pagel App code go to:
 https://github.com/wobrozek/disabled-facilities-map
 
-.net core web api and website app for people with disabilities.
+### Used Technologies
+- ASP .NET Core WebApi
+- Entity Framework
+- JwtBearerToken
+- xunit
 
-# Demo
-https://disability-map.azurewebsites.net/swagger/index.html
+   
+- React
+- TypeScript
+- React Leaflet
+- Material UI
+- SASS
 
 # Used Aure Services
 - Azure Service Bus
@@ -32,3 +53,21 @@ Score contains information about likes from database and forsquare api.
 
 ![image](https://github.com/wobrozek/disability-map-api/assets/64639878/c8566ab5-cd49-4233-880c-2122fe6deb5c)
 ![image](https://github.com/wobrozek/disability-map-api/assets/64639878/b71699e4-e4bd-4355-8ef3-b0e4c9bfd734)
+
+# UI
+
+![scrn1overall](https://github.com/wobrozek/disability-map-api/assets/64639878/44dae02a-6c4a-4235-8d4e-fad5f3991047)
+
+
+Navigation is adapted to the needs of people with limited mobility.
+
+![scrn2panel](https://github.com/wobrozek/disability-map-api/assets/64639878/b00ec7aa-9b1f-4869-b8ba-e00134c018d6)
+
+Users can filter places and facilities by type, see the list of reservations and added places.
+
+![filtering places](https://media.giphy.com/media/XooGriLsvm68zvqkZF/giphy.gif)
+
+![making a reservation](https://media.giphy.com/media/ik4KE8ezCX1eKz6DQm/giphy.gif)
+
+![adding new place](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN29kbGJ1bnk2b2FhY3VrajBmOGFzZjhmajdpeDMxY2xlZTNsbzA2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/V4S3H4Zd1xxCk3nSTl/giphy.gif)
+
