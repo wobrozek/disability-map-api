@@ -3,8 +3,8 @@
 ## Table of contents
 
 - [About the Project](#Description)
-- [Used Technologies](#UsedTechnologies)
-- [Used Aure Services](#UsedAureServices)
+- [Used Technologies](#Used-Technologies)
+- [Used Aure Services](#Used-Aure-Services)
 - [Endpoints](#Endpoints)
 - [UI](#UI)
 
@@ -29,7 +29,7 @@ https://github.com/wobrozek/disabled-facilities-map
 - Material UI
 - SASS
 
-# Used Aure Services
+### Used Aure Services
 - Azure Service Bus
 - Azure Storage
 - Azure Web App
